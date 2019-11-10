@@ -1,0 +1,10 @@
+{
+  "name": "cracking-the-code",
+  "version": "1.0.0",
+  "description": "Practicing problems from the book Cracking the Code",
+  "author": "Loban Rahman <loban.rahman@gmail.com>",
+  "dependencies": {
+    "ts-node": "^8.4.1",
+    "typescript": "^3.7.2"
+  }
+}
