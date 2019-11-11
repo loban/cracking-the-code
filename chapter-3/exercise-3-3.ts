@@ -85,3 +85,13 @@ console.log(stack1.toString());
 
 stack1.drop();
 console.log(stack1.toString());
+
+
+// class SetOfStacksPro<T> extends SetOfStacks<T> {
+//     popAt(index: number) {
+//
+//         for (let iStack = this.stack, i = 0; i < index; i++) {
+//
+//         }
+//     }
+// }
