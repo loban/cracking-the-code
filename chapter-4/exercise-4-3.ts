@@ -8,7 +8,7 @@ class BinaryTreeNode<T> {
     ) {}
 }
 
-function createBalancedBinaryTreeFromSortedArray<T>(sortedArray: Array<T>) {
+export function createBalancedBinaryTreeFromSortedArray<T>(sortedArray: Array<T>) {
     if (!sortedArray.length)
         return null;
 
@@ -26,10 +26,11 @@ function createBalancedBinaryTreeFromSortedArray<T>(sortedArray: Array<T>) {
 }
 
 function test<T>(sortedArray: Array<T>) {
+    console.log('--------------------------------------------------');
     console.log(util.inspect(sortedArray, { maxArrayLength: null }));
     console.log(util.inspect(createBalancedBinaryTreeFromSortedArray(sortedArray), { depth: null }));
 }
 
-test([1, 2, 3, 4, 5, 6, 7, 8]);
-test([1, 2, 3, 4, 5, 6, 7, 8, 9]);
-test([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
+// test([1, 2, 3, 4, 5, 6, 7, 8]);
+// test([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+// test([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
