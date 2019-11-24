@@ -17,7 +17,7 @@ class BinaryTreeNode<T> {
     }
 }
 
-export function generateTree<T>(sortedArray: Array<T>) {
+export function generateTree<T>(sortedArray: Array<T>, debug = false) {
     if (!sortedArray.length)
         return null;
 
@@ -27,67 +27,93 @@ export function generateTree<T>(sortedArray: Array<T>) {
     const leftArray = sortedArray.slice(0, index);
     const rightArray = sortedArray.slice(index + 1);
 
+    if (debug)
+        console.debug('tree', index, val);
+
     return new BinaryTreeNode(
         val,
-        generateTree(leftArray),
-        generateTree(rightArray),
+        generateTree(leftArray, debug),
+        generateTree(rightArray, debug),
     );
 }
 
-function first<T>(node: BinaryTreeNode<T>, debug = true): BinaryTreeNode<T> {
+function firstNode<T>(node: BinaryTreeNode<T>, debug = false): BinaryTreeNode<T> {
     if (!node)
         return node;
     if (debug)
         console.debug('first', node.val);
 
     if (node.left)
-        return first(node.left, debug);
+        return firstNode(node.left, debug);
 
     if (debug)
         console.debug('FIRST', node.val);
     return node;
 }
 
-function last<T>(node: BinaryTreeNode<T>, debug = true): BinaryTreeNode<T> {
+function lastNode<T>(node: BinaryTreeNode<T>, debug = false): BinaryTreeNode<T> {
     if (!node)
         return node;
     if (debug)
         console.debug('last', node.val);
 
     if (node.right)
-        return last(node.right, debug);
+        return lastNode(node.right, debug);
 
     if (debug)
         console.debug('LAST', node.val);
     return node;
 }
 
-function generateNext<T>(node: BinaryTreeNode<T>, debug = true): BinaryTreeNode<T> {
+function prevNode<T>(node: BinaryTreeNode<T>, debug = false): BinaryTreeNode<T> {
+    if (!node)
+        return node;
+    if (debug)
+        console.debug('prev', node.val);
+
+    if (debug)
+        console.debug('PREV', node.left?.val);
+    return node.left;
+}
+
+function nextNode<T>(node: BinaryTreeNode<T>, lastNode: BinaryTreeNode<T> = null, debug = false): BinaryTreeNode<T> {
     if (!node)
         return node;
     if (debug)
         console.debug('next', node.val);
 
-    const left = last(node.left, debug);
-    if (left)
-        left.next = node;
+    if (!node.right && node.right !== lastNode)
+        return nextNode(node.parent, node, debug);
 
-    let next = node;
-    let lastNext = null;
-    while (!next.right && next.right != lastNext) {
-        lastNext = next;
-        next = next.parent;
-    }
+    if (debug)
+        console.debug('NEXT', node.right?.val);
+    return node.right;
+}
 
-    const right = first(next?.right, debug);
-    if (right)
-        node.next = right;
+function generateNext<T>(node: BinaryTreeNode<T>, debug = true): BinaryTreeNode<T> {
+    if (!node)
+        return node;
+    if (debug)
+        console.debug('generate', node.val);
+
+    const prev = prevNode(node, debug);
+
+    const lastOfPrev = lastNode(prev, debug);
+    if (lastOfPrev)
+        lastOfPrev.next = node;
+
+    const next = nextNode(node, null, debug);
+
+    const firstOfNext = firstNode(next, debug);
+    if (firstOfNext)
+        node.next = firstOfNext;
+
+    if (debug)
+        console.debug('GENERATE', lastOfPrev?.val, node.val, firstOfNext?.val);
 
     generateNext(node.left, debug);
     generateNext(node.right, debug);
 
-    if (debug)
-        console.debug('NEXT', left?.val, node.val, right?.val);
     return node;
 }
 
@@ -97,26 +123,26 @@ function generateList<T>(node: BinaryTreeNode<T>): Array<T> {
     return [node.val, ...generateList(node.next)];
 }
 
-function test1<T>(tree: BinaryTreeNode<T>) {
+function test1<T>(tree: BinaryTreeNode<T>, debug = false) {
     console.log('--------------------------------------------------');
-    tree = generateNext(tree, false);
+    tree = generateNext(tree, debug);
 
     console.log('..................................................');
     // console.log(util.inspect(tree, { depth: null }));
 
     console.log('..................................................');
-    const list = generateList(first(tree, false));
+    const list = generateList(firstNode(tree, debug));
 
     console.log('..................................................');
     console.log(util.inspect(list, { maxArrayLength: null }));
 }
 
-function test2<T>(sortedArray: Array<T>) {
+function test2<T>(sortedArray: Array<T>, debug = false) {
     console.log('==================================================');
     console.log(util.inspect(sortedArray, { maxArrayLength: null }));
 
     console.log('..................................................');
-    const tree = generateTree(sortedArray);
+    const tree = generateTree(sortedArray, debug);
 
     test1(tree);
 }
