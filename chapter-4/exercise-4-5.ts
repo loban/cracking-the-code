@@ -3,12 +3,21 @@ import * as util from 'util';
 class BinaryTreeNode<T> {
     constructor(
         public val: T = null,
+
         public left: BinaryTreeNode<T> = null,
         public right: BinaryTreeNode<T> = null,
-    ) {}
+        public parent: BinaryTreeNode<T> = null,
+
+        public next: BinaryTreeNode<T> = null,
+    ) {
+        if (this.left)
+            this.left.parent = this;
+        if (this.right)
+            this.right.parent = this;
+    }
 }
 
-export function createBalancedBinaryTreeFromSortedArray<T>(sortedArray: Array<T>) {
+export function generateTree<T>(sortedArray: Array<T>) {
     if (!sortedArray.length)
         return null;
 
@@ -20,15 +29,25 @@ export function createBalancedBinaryTreeFromSortedArray<T>(sortedArray: Array<T>
 
     return new BinaryTreeNode(
         val,
-        createBalancedBinaryTreeFromSortedArray(leftArray),
-        createBalancedBinaryTreeFromSortedArray(rightArray),
+        generateTree(leftArray),
+        generateTree(rightArray),
     );
+}
+
+function generateNext<T>(node: BinaryTreeNode<T>): BinaryTreeNode<T> {
+    if (!node)
+        return;
+
+    return node;
 }
 
 function test<T>(sortedArray: Array<T>) {
     console.log('--------------------------------------------------');
     console.log(util.inspect(sortedArray, { maxArrayLength: null }));
-    console.log(util.inspect(createBalancedBinaryTreeFromSortedArray(sortedArray), { depth: null }));
+    let tree = generateTree(sortedArray);
+    console.log(util.inspect(tree, { depth: null }));
+    tree = generateNext(tree);
+    console.log(util.inspect(tree, { depth: null }));
 }
 
 test([1, 2, 3, 4, 5, 6, 7, 8]);
