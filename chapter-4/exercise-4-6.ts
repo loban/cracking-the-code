@@ -20,15 +20,16 @@ function find<T>(node: BinaryTreeNode<T>, val: T): boolean {
 function commonAncestor<T>(node: BinaryTreeNode<T>, val1: T, val2: T): T {
     const here1 = node.val === val1;
     const here2 = node.val === val2;
-    const left1 = find(node.left, val1);
-    const left2 = find(node.left, val2);
-    const right1 = find(node.right, val1);
-    const right2 = find(node.right, val2);
 
     if (here1)
         return node.val;
     if (here2)
         return node.val;
+
+    const left1 = find(node.left, val1);
+    const left2 = find(node.left, val2);
+    const right1 = find(node.right, val1);
+    const right2 = find(node.right, val2);
 
     if (left1 && right2)
         return node.val;
@@ -79,3 +80,17 @@ test(tree, 1, 2);
 test(tree, 1, 3);
 test(tree, 1, 10);
 test(tree, 3, 8);
+
+test(tree, 11, 12);
+test(tree, 12, 11);
+test(tree, 11, 8);
+test(tree, 8, 11);
+test(tree, 8, 8);
+test(tree, 0, 11);
+test(tree, 11, 0);
+test(tree, 12, 10);
+test(tree, 10, 12);
+test(tree, 6, 7);
+test(tree, 7, 6);
+test(tree, 3, 5);
+test(tree, 5, 3);
