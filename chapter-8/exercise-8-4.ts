@@ -1,7 +1,7 @@
 function addElement<T>(letter: string, allSubwords: Set<string>): Set<string> {
     Array.from(allSubwords.values()).forEach(subword => {
         for (let i = 0; i <= subword.length; i++) {
-            const newSubword = subword.slice(subword.length - i) + letter + subword.slice(i);
+            const newSubword = subword.slice(0, i) + letter + subword.slice(i);
             allSubwords.add(newSubword);
         }
     });
